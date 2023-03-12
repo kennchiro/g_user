@@ -39,7 +39,7 @@ class _UserAddPageState extends ConsumerState<UserAddPage> {
     final email = useTextEditingController();
     final password = useTextEditingController();
     final confirmPassword = useTextEditingController();
-    final isActive = useState(false);
+    final isActive = useState(1);
     final isAdmin = useState({});
 
     saveUser()  {
@@ -53,8 +53,7 @@ class _UserAddPageState extends ConsumerState<UserAddPage> {
             isAdmin: isAdmin.value['value'],
             isActive: isActive.value,
             created_at: dateNow.toString());
-        ref.read(userDataProvider.notifier).addUser(user);
-        Navigator.pop(context);
+        ref.read(userDataProvider.notifier).addUser(user, context);
       }
     }
 
@@ -126,10 +125,9 @@ class _UserAddPageState extends ConsumerState<UserAddPage> {
                     child: FlutterSwitch(
                       activeColor: Colors.green,
                       width: 50,
-                      value: isActive.value,
+                      value: isActive.value == 1 ? true : false,
                       onToggle: (v) {
-                        
-                        isActive.value = v;
+                        isActive.value = v == true ? 1 : 0;
                       },
                     ),
                   ),

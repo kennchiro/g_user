@@ -14,7 +14,7 @@ const SignUpPage({ Key? key }) : super(key: key);
       body: Column(
         children: [
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Container(
                 alignment: Alignment.center,
                 child: Icon(
@@ -25,7 +25,7 @@ const SignUpPage({ Key? key }) : super(key: key);
               ),
           ),
           Expanded(
-              flex: 3,
+              flex: 2,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 color: Colors.white,

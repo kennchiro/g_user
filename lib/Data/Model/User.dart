@@ -9,7 +9,7 @@ class User extends Equatable {
   final String? name;
   final String? email;
   final String? email_verified_at;
-  final bool? isActive;
+  final int? isActive;
   final int? isAdmin;
   final String? created_at;
   final String? update_at;
@@ -56,13 +56,18 @@ class User extends Equatable {
     };
   }
 
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) =>
+      User.fromMap(json.decode(source) as Map<String, dynamic>);
+
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['id'] != null ? map['id'] as int : null,
       name: map['name'] != null ? map['name'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
       email_verified_at: map['email_verified_at'] != null ? map['email_verified_at'] as String : null,
-      isActive: map['isActive'] != null ? map['isActive'] as bool : null,
+      isActive: map['isActive'] != null ? map['isActive'] as int : null,
       isAdmin: map['isAdmin'] != null ? map['isAdmin'] as int : null,
       created_at: map['created_at'] != null ? map['created_at'] as String : null,
       update_at: map['update_at'] != null ? map['update_at'] as String : null,
@@ -70,16 +75,12 @@ class User extends Equatable {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
-
   User copyWith({
     int? id,
     String? name,
     String? email,
     String? email_verified_at,
-    bool? isActive,
+    int? isActive,
     int? isAdmin,
     String? created_at,
     String? update_at,

@@ -99,11 +99,11 @@ class UserItem extends ConsumerWidget {
           child: FlutterSwitch(
             activeColor: Colors.green,
             width: 50,
-            value: value,
+            value: user.isActive == 1 ? true : false,
             onToggle: (v) {
               ref
                   .watch(userDataProvider.notifier)
-                  .disabledUser(email: user.email!);
+                  .disabledUser(email: user.email!, isActive: v ? 1 : 0);
             },
           ),
         ),

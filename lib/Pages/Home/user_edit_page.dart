@@ -160,9 +160,9 @@ class _UserEditPageState extends ConsumerState<UserEditPage> {
                     child: FlutterSwitch(
                       activeColor: Colors.green,
                       width: 50,
-                      value: isActive.value!,
+                      value: isActive.value == 1 ? true : false ,
                       onToggle: (v) {
-                        isActive.value = v;
+                          isActive.value = v == true ? 1 : 0;
                       },
                     ),
                   ),

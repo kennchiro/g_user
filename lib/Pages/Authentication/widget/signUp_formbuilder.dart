@@ -23,6 +23,7 @@ class _SignUpFormBuilderState extends ConsumerState<SignUpFormBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final name = useTextEditingController();
     final email = useTextEditingController();
     final password = useTextEditingController();
     final confirmPassword = useTextEditingController();
@@ -31,8 +32,9 @@ class _SignUpFormBuilderState extends ConsumerState<SignUpFormBuilder> {
     signUp() async {
       formKey.currentState!.save();
       if (formKey.currentState!.validate()) {
-        final user = User(email: email.text, password: password.text);
-        await ref.read(authenticationProvider).signUp(user, context);
+        final user = User(email: email.text, password: password.text, name: name.text);
+         await ref.read(authenticationProvider).signUp(user, context);
+        print(user.toJson());
       }
     }
 
@@ -48,10 +50,21 @@ class _SignUpFormBuilderState extends ConsumerState<SignUpFormBuilder> {
                 const Text(
                   "S'inscrire",
                   style: TextStyle(
-                     fontSize: 40.0,
+                    fontSize: 40.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+
+                CustomTextFieldIcon(
+                  labelText: "Nom complet",
+                  controller: name,
+                  name: 'name',
+                  data: Icons.person,
+                  hintText: "Entrez votre nom complet",
+                  textInputType: TextInputType.text,
+                  validation: FormBuilderValidators.required(),
+                ),
+
                 CustomTextFieldIcon(
                   labelText: "Adresse email",
                   controller: email,
@@ -86,7 +99,6 @@ class _SignUpFormBuilderState extends ConsumerState<SignUpFormBuilder> {
                 Container(
                   padding: const EdgeInsets.only(top: 10),
                   alignment: Alignment.centerLeft,
-
                   child: TextButton(
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, '/signInPage');

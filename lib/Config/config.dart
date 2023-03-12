@@ -5,7 +5,6 @@ import '../Utils/app_color.dart';
 import '../Utils/app_path_provider.dart';
 
 class GUserApp {
-
   // for user info and other
   static SharedPreferences? constSharedPreferences;
 
@@ -14,7 +13,7 @@ class GUserApp {
   static const String username = 'email';
   static const String userPassword = 'userPassword';
   static const String userToken = 'token';
-
+  static const String isAdmin = 'isAdmin';
 
   // init all main method
   static initMain() async {

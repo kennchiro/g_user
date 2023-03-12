@@ -1,26 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:g_user/Data/Model/User.dart';
+import 'package:g_user/Services/serviceAppi.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../../../Services/Api/baseApi.dart';
 
 class UserNotifier extends StateNotifier<List<User>> {
-  UserNotifier()
-      : super([
-          User(
-              name: 'Lazaniaina Elie',
-              email: 'elie@gmail.com',
-              isActive: true,
-              created_at: '07 Mars 2023',
-              isAdmin: 1),
-          User(
-              name: 'Tahirintsoa Lynda',
-              email: 'lynda@gmail.com',
-              isActive: false,
-              created_at: '05 Mars 2023',
-              isAdmin: 0),
-        ]);
+  UserNotifier() : super([]);
+
+  //
+  addAll() async {
+    var dio = await ServiceApi.getDio();
+    var response = await dio.get(BaseAPI.getUserInfoEndPoint);
+    List<dynamic> users = response.data;
+    var listUser = users.map((e) => User.fromMap(e)).toList();
+
+    if (response.statusCode == 200) {
+      state = listUser;
+      print(response.data);
+    }
+  }
 
   // add new user
-  addUser(User user) {
-    state = [...state, user];
+  addUser(User user, context) async {
+    var dio = await ServiceApi.getDio();
+    var response = await dio.post(BaseAPI.addUserInfoEndPoint, data: {
+      'name': user.name,
+      'email': user.email,
+      'password': user.password,
+      "password_confirmation": user.password
+    });
+    if (response.statusCode == 200) {
+      print("wait validation");
+    } else {
+      addAll();
+      Navigator.pop(context);
+      EasyLoading.showSuccess("Utilisateur ajout avec succes");
+    }
   }
 
   // edit user
@@ -37,11 +53,11 @@ class UserNotifier extends StateNotifier<List<User>> {
   }
 
   // active/desactive
-  disabledUser({required String email}) {
+  disabledUser({required String email, required int isActive}) {
     state = [
       for (final data in state)
         if (data.email == email)
-          data.copyWith(isActive: !data.isActive!)
+          data.copyWith(isActive: data.isActive!)
         else
           data
     ];

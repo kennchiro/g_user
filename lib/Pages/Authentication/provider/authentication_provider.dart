@@ -25,7 +25,9 @@ class Authentication {
 
       if (response.statusCode == 200) {
         await GUserApp.constSharedPreferences!
-            .setString(GUserApp.userToken, response.data['token']);
+            .setString(GUserApp.userToken, response.data['user']['api_token']);
+        await GUserApp.constSharedPreferences!
+            .setInt(GUserApp.isAdmin, response.data['user']['isAdmin']);
         await GUserApp.constSharedPreferences!
             .setString(GUserApp.username, user.email!);
         await GUserApp.constSharedPreferences!
@@ -57,17 +59,23 @@ class Authentication {
     );
 
     try {
-      final response = await dioInterceptor.post(BaseAPI.creerCompteEndPoint, data: {
+      final response =
+          await dioInterceptor.post(BaseAPI.creerCompteEndPoint, data: {
+        "name": user.name,
         "email": user.email,
         "password": user.password,
+        "password_confirmation": user.password
       });
-      bool isSuccess = await response.data['success'];
-      String message = await response.data['message'];
 
-      if (isSuccess) {
-        await signIn(user, context);
+      // bool isSuccess = await response.data['success'];
+      // String message = await response.data['message'];
+
+      if (response.statusCode == 200) {
+        await EasyLoading.showSuccess("Enregistee avec success");
+        // await signIn(user, context);
       } else {
-        await EasyLoading.showInfo(message);
+        await EasyLoading.showSuccess("Veuillez verifier votre email");
+        Navigator.pop(context);
       }
     } on DioError catch (e) {
       if (kDebugMode) {
@@ -98,11 +106,12 @@ class Authentication {
 
   // LOGOUT
   logOut(context) async {
-    await GUserApp.constSharedPreferences!.remove(GUserApp.userId);
+    await GUserApp.constSharedPreferences!.remove(GUserApp.isAdmin);
     await GUserApp.constSharedPreferences!
         .remove(GUserApp.userToken)
         .whenComplete(() {
-      Navigator.pushNamedAndRemoveUntil(context, '/homePage', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/signInPage', (route) => false);
     });
   }
 }

@@ -111,8 +111,7 @@ class _LoginFormBuilderState extends ConsumerState<LoginFormBuilder> {
                       style: TextStyle(color: AppColors.WHITE),
                     ),
                     onPressed: () async {
-                      // await signIn();
-                       Navigator.pushReplacementNamed(context, '/homePage');
+                      await signIn();//  Navigator.pushReplacementNamed(context, '/homePage');
                     },
                   ),
                 ),
