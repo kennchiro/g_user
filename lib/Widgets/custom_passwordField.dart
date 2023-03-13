@@ -5,18 +5,18 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../Utils/app_color.dart';
 
-
 class CustomPasswordField extends HookConsumerWidget {
   final TextEditingController passwordController;
   final dynamic validation;
-  final bool isConfirm;
+  final String labelText;
+  final String hintText;
 
-  const CustomPasswordField({
-    super.key,
-    required this.passwordController,
-    required this.validation,
-    required this.isConfirm,
-  });
+  const CustomPasswordField(
+      {super.key,
+      required this.passwordController,
+      required this.validation,
+      this.hintText ="Entrez votre mot de passe",
+      this.labelText = "Mot de passe"});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,9 +29,7 @@ class CustomPasswordField extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(top: 14, bottom: 10),
           child: Text(
-            isConfirm
-                ? "Confirmer mot de passe "
-                : "Mot de passe",
+            labelText,
             style: const TextStyle(
                 color: Colors.black87, fontWeight: FontWeight.w300),
           ),
@@ -45,9 +43,7 @@ class CustomPasswordField extends HookConsumerWidget {
           name: 'password',
           decoration: InputDecoration(
             filled: true,
-            hintText: isConfirm
-                ? "Confirmer votre mot de passe"
-                : "Entrez votre mot de passe",
+            hintText:  hintText,
             hintStyle: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.bold,

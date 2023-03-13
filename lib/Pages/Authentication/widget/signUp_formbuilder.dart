@@ -77,14 +77,14 @@ class _SignUpFormBuilderState extends ConsumerState<SignUpFormBuilder> {
 
                 // password
                 CustomPasswordField(
-                  isConfirm: false,
                   passwordController: password,
                   validation: FormBuilderValidators.required(),
                 ),
 
                 // confirm password
                 CustomPasswordField(
-                  isConfirm: true,
+                  labelText: "Confirmer mot de passe",
+                  hintText: "Retapez votre mote passe",
                   passwordController: confirmPassword,
                   validation: FormBuilderValidators.compose([
                     (val) {

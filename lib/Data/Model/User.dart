@@ -70,7 +70,7 @@ class User extends Equatable {
       isActive: map['isActive'] != null ? map['isActive'] as int : null,
       isAdmin: map['isAdmin'] != null ? map['isAdmin'] as int : null,
       created_at: map['created_at'] != null ? map['created_at'] as String : null,
-      update_at: map['update_at'] != null ? map['update_at'] as String : null,
+      update_at: map['update_at'] != null ? map['update_at'] as String : '',
       password: map['password'] != null ? map['password'] as String : null,
     );
   }

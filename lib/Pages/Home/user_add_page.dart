@@ -35,6 +35,7 @@ class _UserAddPageState extends ConsumerState<UserAddPage> {
 
   @override
   Widget build(BuildContext context) {
+
     final name = useTextEditingController();
     final email = useTextEditingController();
     final password = useTextEditingController();
@@ -45,14 +46,13 @@ class _UserAddPageState extends ConsumerState<UserAddPage> {
     saveUser()  {
       formKey.currentState!.save();
       if (formKey.currentState!.validate()) {
-        var dateNow = DateTime.now();
         final user = User(
             email: email.text,
             name: name.text,
             password: password.text,
             isAdmin: isAdmin.value['value'],
             isActive: isActive.value,
-            created_at: dateNow.toString());
+            );
         ref.read(userDataProvider.notifier).addUser(user, context);
       }
     }
@@ -197,7 +197,6 @@ class _UserAddPageState extends ConsumerState<UserAddPage> {
               // password
 
               CustomPasswordField(
-                isConfirm: false,
                 passwordController: password,
                 validation: FormBuilderValidators.required(),
               ),
@@ -208,7 +207,6 @@ class _UserAddPageState extends ConsumerState<UserAddPage> {
 
               // confirm password
               CustomPasswordField(
-                isConfirm: true,
                 passwordController: confirmPassword,
                 validation: FormBuilderValidators.compose([
                   (val) {

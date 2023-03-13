@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import '../../../Config/config.dart';
 import '../../../Data/Model/User.dart';
 import '../../../Services/Api/baseApi.dart';
@@ -41,7 +40,7 @@ class Authentication {
         }
       }
     } on DioError catch (e) {
-      if (e.response!.statusCode == 401) {
+      if (e.response!.statusCode == 401 || e.response!.statusCode == 400) {
         EasyLoading.showInfo('Mot de passe incorrect ou email invalide');
       }
       if (kDebugMode) {
@@ -52,7 +51,7 @@ class Authentication {
 
   // signUp user
   Future signUp(User user, context) async {
-    var dioInterceptor = Dio();
+    var dio = Dio();
 
     await EasyLoading.show(
       status: 'Veuillez patienter',
@@ -60,7 +59,7 @@ class Authentication {
 
     try {
       final response =
-          await dioInterceptor.post(BaseAPI.creerCompteEndPoint, data: {
+          await dio.post(BaseAPI.creerCompteEndPoint, data: {
         "name": user.name,
         "email": user.email,
         "password": user.password,
@@ -69,6 +68,7 @@ class Authentication {
 
       // bool isSuccess = await response.data['success'];
       // String message = await response.data['message'];
+
 
       if (response.statusCode == 200) {
         await EasyLoading.showSuccess("Enregistee avec success");
@@ -88,8 +88,7 @@ class Authentication {
   _getUserId(String email) async {
     var dioInterceptor = await ServiceApi.getDio();
     try {
-      final response =
-          await dioInterceptor.get('${BaseAPI.getUserInfoEndPoint}/$email');
+      final response = await dioInterceptor.get('${BaseAPI.getUserInfoEndPoint}/$email');
       var data = response.data;
       if (response.statusCode == 200) {
         GUserApp.constSharedPreferences!.setInt(GUserApp.userId, data['id']);

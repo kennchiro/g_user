@@ -25,11 +25,12 @@ class UserNotifier extends StateNotifier<List<User>> {
   addUser(User user, context) async {
     var dio = await ServiceApi.getDio();
     var response = await dio.post(BaseAPI.addUserInfoEndPoint, data: {
-      'name': user.name,
-      'email': user.email,
-      'password': user.password,
+      "name": user.name,
+      "email": user.email,
+      "password": user.password,
       "password_confirmation": user.password
     });
+    print(response.statusMessage);
     if (response.statusCode == 200) {
       print("wait validation");
     } else {
@@ -40,11 +41,17 @@ class UserNotifier extends StateNotifier<List<User>> {
   }
 
   // edit user
-  void editUser({required String email, required User user}) {
-    state = [
-      for (final data in state)
-        if (data.email == email) user else data,
-    ];
+  void editUser({required int id, required User user, context}) async {
+    var dio = await ServiceApi.getDio();
+    var response = await dio
+        .put('${BaseAPI.updateUserInfoEndPoint}$id', data: {"name": user.name});
+    if (response.statusCode == 200) {
+      await EasyLoading.showSuccess("Modification avec success");
+      state = [
+        for (final data in state)
+          if (data.id == id) user else data,
+      ];
+    }
   }
 
   // delete user
@@ -53,14 +60,56 @@ class UserNotifier extends StateNotifier<List<User>> {
   }
 
   // active/desactive
-  disabledUser({required String email, required int isActive}) {
-    state = [
-      for (final data in state)
-        if (data.email == email)
-          data.copyWith(isActive: data.isActive!)
-        else
-          data
-    ];
+  disabledUser({required int id, required bool isActive}) async {
+    var dio = await ServiceApi.getDio();
+
+    var response = await dio.put('${BaseAPI.setActiveUserEndPoint}$id',
+        data: {"action": isActive ? "active" : "desactive"});
+    print(response);
+    if (response.statusCode == 200) {
+      print(response.data);
+      state = [
+        for (final data in state)
+          if (data.id == id) data.copyWith(isActive: isActive ? 1 : 0) else data
+      ];
+    }
+  }
+
+  // update isAdmin
+  setAdmin({required int id, required int isAdmin, context}) async {
+    var dio = await ServiceApi.getDio();
+    var response = await dio.put('${BaseAPI.setAdminEndPoint}$id',
+        data: {"action": isAdmin == 1 ? " active" : "desactive"});
+    print(response);
+    if (response.statusCode == 200) {
+      state = [
+        for (final data in state)
+          if (data.id == id) data.copyWith(isAdmin: isAdmin) else data
+      ];
+      Navigator.pop(context);
+    }
+
+    //  state = [
+    //     for (final data in state)
+    //       if (data.id == id) data.copyWith(isAdmin: isAdmin) else data
+    //   ];
+  }
+
+  updatePassword(String oldPassword, String newPassword) async {
+    var dio = await ServiceApi.getDio();
+    var response = await dio.put(BaseAPI.updatePasswordUserEndPoint, data: {
+      'old_password': oldPassword,
+      'new_password': newPassword,
+      'new_password_confirmation': newPassword,
+    });
+
+    print(response.statusMessage);
+    if (response.statusCode == 200) {
+      await EasyLoading.showSuccess("Modification avec success");
+      // print(response.data['user']);
+    } else {
+      await EasyLoading.showSuccess("Modification avec success");
+    }
   }
 }
 

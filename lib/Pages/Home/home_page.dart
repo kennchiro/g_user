@@ -1,9 +1,13 @@
+import 'dart:ui';
+
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:g_user/Config/config.dart';
 import 'package:g_user/Pages/Authentication/provider/authentication_provider.dart';
 import 'package:g_user/Pages/Home/provider/user_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:nil/nil.dart';
+import '../../Data/Model/User.dart';
 import '../../Utils/app_color.dart';
 import 'widget/user_item.dart';
 
@@ -15,14 +19,72 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+
   @override
   void initState() {
     ref.read(userDataProvider.notifier).addAll();
     super.initState();
   }
-
+  
   var name = GUserApp.constSharedPreferences!.getString(GUserApp.username);
   var isAdmin = GUserApp.constSharedPreferences!.getInt(GUserApp.isAdmin);
+
+  showInfoDialog() async {
+    await showModal(
+      context: context,
+      configuration: const FadeScaleTransitionConfiguration(
+        transitionDuration: Duration(seconds: 1),
+      ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 0.5,
+              sigmaY: 0.5,
+            ),
+            child: Container(
+              height: 150,
+              width: 250,
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/userEditPage");
+                    },
+                    title: const Text('Modifier profile'),
+                    leading: const Icon(Icons.person),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      ref.read(authenticationProvider).logOut(context);
+                    },
+                    title: const Text('Deconnexion'),
+                    leading: const Icon(Icons.logout),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +105,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                ref.read(authenticationProvider).logOut(context);
+              onPressed: () async {
+                await showInfoDialog();
               },
               icon: const Icon(
                 Icons.more_vert,

@@ -69,7 +69,6 @@ class _LoginFormBuilderState extends ConsumerState<LoginFormBuilder> {
             ),
 
             CustomPasswordField(
-              isConfirm: false,
               passwordController: password,
               validation: FormBuilderValidators.required(),
             ),
