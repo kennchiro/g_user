@@ -11,6 +11,7 @@ import '../../../Data/Model/User.dart';
 import '../../../Utils/app_color.dart';
 
 class UserItem extends ConsumerWidget {
+  
   final User user;
   final String title;
   final Function(bool) onChanged;

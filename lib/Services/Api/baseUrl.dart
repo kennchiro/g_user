@@ -1,6 +1,6 @@
 class BaseUrl {
   static const String online = "https://sav.neny.fr";
-  static const String local = "http://192.168.92.196:8000";
+  static const String local = "http://192.168.1.172:8000";
 
   static String currentUrl = BaseUrl.local;
 

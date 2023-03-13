@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -24,7 +23,6 @@ class _LoginFormBuilderState extends ConsumerState<LoginFormBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    
     final email = useTextEditingController();
     final password = useTextEditingController();
 
@@ -48,15 +46,14 @@ class _LoginFormBuilderState extends ConsumerState<LoginFormBuilder> {
           children: [
             const Center(
               child: Text(
-                 'Connexion',
+                'Connexion',
                 style: TextStyle(
                   fontSize: 40.0,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-            
-           
+
             // email field
             CustomTextFieldIcon(
               labelText: 'Adresse email',
@@ -84,15 +81,13 @@ class _LoginFormBuilderState extends ConsumerState<LoginFormBuilder> {
                   }
                 },
                 child: Text(
-                 'Créer un compte',
+                  'Créer un compte',
                   style: TextStyle(
                       color: AppColors.PRIMARY_COLOR,
                       fontWeight: FontWeight.w800),
                 ),
               ),
             ),
-
-            
 
             Wrap(
               children: [
@@ -110,7 +105,7 @@ class _LoginFormBuilderState extends ConsumerState<LoginFormBuilder> {
                       style: TextStyle(color: AppColors.WHITE),
                     ),
                     onPressed: () async {
-                      await signIn();//  Navigator.pushReplacementNamed(context, '/homePage');
+                      await signIn(); //  Navigator.pushReplacementNamed(context, '/homePage');
                     },
                   ),
                 ),
@@ -119,6 +114,7 @@ class _LoginFormBuilderState extends ConsumerState<LoginFormBuilder> {
                   alignment: Alignment.center,
                   child: TextButton(
                     onPressed: () {
+                      Navigator.pushNamed(context, '/forgotPasswordPage');
                       if (kDebugMode) {
                         print('mot de passe oublier');
                       }

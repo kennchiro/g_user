@@ -58,8 +58,7 @@ class Authentication {
     );
 
     try {
-      final response =
-          await dio.post(BaseAPI.creerCompteEndPoint, data: {
+      final response = await dio.post(BaseAPI.creerCompteEndPoint, data: {
         "name": user.name,
         "email": user.email,
         "password": user.password,
@@ -68,7 +67,6 @@ class Authentication {
 
       // bool isSuccess = await response.data['success'];
       // String message = await response.data['message'];
-
 
       if (response.statusCode == 200) {
         await EasyLoading.showSuccess("Enregistee avec success");
@@ -88,7 +86,8 @@ class Authentication {
   _getUserId(String email) async {
     var dioInterceptor = await ServiceApi.getDio();
     try {
-      final response = await dioInterceptor.get('${BaseAPI.getUserInfoEndPoint}/$email');
+      final response =
+          await dioInterceptor.get('${BaseAPI.getUserInfoEndPoint}/$email');
       var data = response.data;
       if (response.statusCode == 200) {
         GUserApp.constSharedPreferences!.setInt(GUserApp.userId, data['id']);
@@ -101,6 +100,16 @@ class Authentication {
         print(e);
       }
     }
+  }
+
+  forgotPassword(String email) async {
+    var dio = Dio();
+    var response = await dio
+        .post(BaseAPI.forgotPasswordUserEndPoint, data: {"email": email});
+    if (response.statusCode == 200) {
+      EasyLoading.showSuccess("Veuillez consulter votre boite email");
+    }
+    print(response.statusMessage);
   }
 
   // LOGOUT

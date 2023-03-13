@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:g_user/Pages/Authentication/forgot_password_page.dart';
 import 'package:g_user/Pages/Home/user_add_page.dart';
 import 'package:g_user/Pages/Home/user_edit_page.dart';
 
@@ -39,6 +40,15 @@ class GUserRoute {
           settings:
               settings, // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
           pageBuilder: (_, __, ___) => const UserEditPage(),
+          transitionsBuilder: (_, a, __, c) =>
+              FadeTransition(opacity: a, child: c));
+    }
+    
+       if (settings.name == "/forgotPasswordPage") {
+      return PageRouteBuilder(
+          settings:
+              settings, // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+          pageBuilder: (_, __, ___) => const ForgotPasswordPage(),
           transitionsBuilder: (_, a, __, c) =>
               FadeTransition(opacity: a, child: c));
     }
